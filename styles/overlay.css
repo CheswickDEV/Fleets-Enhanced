@@ -1,0 +1,386 @@
+/* * Fleets.eu Enhanced - Overlay Styles
+ * Design: Apple/iOS Inspired (Glassmorphism, Clean, Minimalist)
+ * Version: 2.8.0 (Width 485px, Force Default Cursor)
+ */
+
+/* ==========================================================================
+   1. CSS Variables & Configuration
+   ========================================================================== */
+#fleets-enhancer-overlay {
+  /* Colors */
+  --pc-bg-primary: rgba(255, 255, 255, 0.96);
+  --pc-bg-secondary: #f9f9fb;
+  --pc-bg-tertiary: #f2f2f7;
+  --pc-bg-hover: rgba(0, 0, 0, 0.03);
+  
+  --pc-text-primary: #1d1d1f;
+  --pc-text-secondary: #86868b;
+  --pc-text-tertiary: #aeaeb2;
+  --pc-text-inverse: #ffffff;
+
+  --pc-accent-blue: #007aff;
+  --pc-accent-success: #34c759;
+  --pc-accent-warning: #ff9500;
+  --pc-accent-danger: #ff3b30;
+
+  --pc-gradient-plate: linear-gradient(135deg, #3478f6 0%, #00c7be 100%);
+  
+  /* Spacing */
+  --pc-space-xs: 8px;
+  --pc-space-sm: 12px;
+  --pc-space-md: 16px;
+  --pc-space-lg: 20px;
+  --pc-space-xl: 24px;
+
+  /* Dimensions */
+  /* FIX: Breite auf 485px gesetzt */
+  --pc-width-default: 485px; 
+  --pc-header-height: 70px;
+  
+  /* Border Radius */
+  --pc-radius-sm: 6px;
+  --pc-radius-md: 10px;
+  --pc-radius-lg: 14px;
+  --pc-radius-xl: 22px;
+
+  /* Shadows */
+  --pc-shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --pc-shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --pc-shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+  
+  /* Typography */
+  --pc-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --pc-font-mono: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+}
+
+/* ==========================================================================
+   2. Reset & Base Container
+   ========================================================================== */
+
+#fleets-enhancer-overlay {
+  all: initial;
+  font-family: var(--pc-font-sans);
+  box-sizing: border-box;
+  
+  /* FIX: Zwingt den normalen Mauszeiger überall im Overlay */
+  cursor: default; 
+  
+  position: fixed;
+  top: 65px;
+  right: var(--pc-space-md);
+  bottom: var(--pc-space-md);
+  
+  width: var(--pc-width-default);
+  max-width: calc(100vw - 32px);
+  
+  background-color: var(--pc-bg-primary);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  border-radius: var(--pc-radius-xl);
+  box-shadow: var(--pc-shadow-lg);
+  border: 1px solid rgba(0,0,0,0.05);
+  
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  color: var(--pc-text-primary);
+  -webkit-font-smoothing: antialiased;
+  
+  animation: pc-slide-in 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, height 0.3s ease;
+}
+
+#fleets-enhancer-overlay * {
+  box-sizing: border-box;
+  /* Vererbt den Standard-Cursor an alle Kind-Elemente */
+  cursor: inherit; 
+}
+
+/* Ausnahmen für klickbare Elemente wiederherstellen */
+#fleets-enhancer-overlay button, 
+#fleets-enhancer-overlay select,
+#fleets-enhancer-overlay input {
+  cursor: pointer; /* Oder text für inputs */
+}
+#fleets-enhancer-overlay input[type="text"] {
+  cursor: text;
+}
+
+#fleets-enhancer-overlay ::-webkit-scrollbar { width: 8px; height: 8px; }
+#fleets-enhancer-overlay ::-webkit-scrollbar-track { background: transparent; }
+#fleets-enhancer-overlay ::-webkit-scrollbar-thumb {
+  background-color: var(--pc-text-tertiary); border-radius: 4px; border: 2px solid var(--pc-bg-primary);
+}
+#fleets-enhancer-overlay ::-webkit-scrollbar-thumb:hover { background-color: var(--pc-text-secondary); }
+
+/* ==========================================================================
+   3. Header Section
+   ========================================================================== */
+
+.fleets-header {
+  flex: 0 0 auto;
+  height: var(--pc-header-height);
+  padding: 0 var(--pc-space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: rgba(255,255,255,0.5);
+  transition: padding 0.3s ease;
+}
+
+.fleets-title { display: flex; align-items: center; }
+.fleets-logo { height: 28px; width: auto; object-fit: contain; }
+.fleets-header-actions { display: flex; gap: var(--pc-space-xs); }
+
+.fleets-btn {
+  border: none; font-family: inherit; font-size: 13px; font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1); outline: none;
+}
+.fleets-btn:active { transform: scale(0.96); }
+
+.fleets-btn-primary {
+  background-color: var(--pc-text-primary); color: var(--pc-text-inverse);
+  padding: 8px 16px; border-radius: var(--pc-radius-md); box-shadow: var(--pc-shadow-sm); white-space: nowrap;
+}
+.fleets-btn-primary:hover:not(:disabled) { background-color: #000; transform: translateY(-1px); box-shadow: var(--pc-shadow-md); }
+.fleets-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.fleets-btn-icon {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; padding-bottom: 18px;
+  background-color: var(--pc-bg-tertiary); color: var(--pc-text-secondary);
+  border-radius: var(--pc-radius-md); font-size: 18px; line-height: 1;
+}
+.fleets-btn-icon:hover { background-color: #e5e5ea; color: var(--pc-text-primary); }
+
+/* ==========================================================================
+   4. Body & Stats
+   ========================================================================== */
+
+.fleets-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; 
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.fleets-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--pc-space-sm);
+  margin-bottom: var(--pc-space-lg);
+  padding: var(--pc-space-lg) var(--pc-space-lg) 0 var(--pc-space-lg);
+}
+
+.fleets-stat-card {
+  background: var(--pc-bg-secondary); padding: 16px 12px;
+  border-radius: var(--pc-radius-lg); text-align: center;
+  border: 1px solid rgba(0,0,0,0.03); transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.fleets-stat-card:hover { transform: translateY(-2px); box-shadow: var(--pc-shadow-sm); background: #fff; }
+
+.fleets-stat-value {
+  display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.03em;
+  color: var(--pc-text-primary); margin-bottom: 2px; font-feature-settings: "tnum";
+}
+.fleets-stat-card.success .fleets-stat-value { color: var(--pc-accent-success); }
+.fleets-stat-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--pc-text-secondary); font-weight: 600;
+}
+
+/* ==========================================================================
+   5. Filters
+   ========================================================================== */
+
+.fleets-filters {
+  display: flex; flex-direction: column; gap: var(--pc-space-sm);
+  margin-bottom: var(--pc-space-lg); padding: 0 var(--pc-space-lg) var(--pc-space-lg) var(--pc-space-lg);
+}
+
+.fleets-search-wrapper { position: relative; width: 100%; }
+.fleets-search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; opacity: 0.5; pointer-events: none;
+}
+
+#fleets-search-input {
+  width: 100%; padding: 10px 12px 10px 34px; background: var(--pc-bg-tertiary);
+  border: 1px solid transparent; border-radius: var(--pc-radius-md);
+  font-size: 14px; color: var(--pc-text-primary); transition: all 0.2s ease; outline: none;
+}
+#fleets-search-input:focus { background: #fff; border-color: var(--pc-accent-blue); box-shadow: 0 0 0 4px rgba(0,122,255,0.1); }
+
+.fleets-sort-row { display: flex; align-items: center; gap: var(--pc-space-xs); }
+.fleets-sort-label { font-size: 12px; color: var(--pc-text-secondary); }
+
+#fleets-sort-select {
+  flex: 1; appearance: none; background-color: var(--pc-bg-tertiary);
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2386868b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; background-size: 8px auto;
+  border: none; border-radius: var(--pc-radius-md); padding: 8px 24px 8px 12px;
+  font-size: 13px; color: var(--pc-text-primary); outline: none; cursor: pointer;
+}
+#fleets-sort-select:focus { box-shadow: 0 0 0 2px rgba(0,122,255,0.1); }
+
+/* ==========================================================================
+   6. Data Table (Optimiert für 485px)
+   ========================================================================== */
+
+.fleets-table-container {
+  flex: 1; margin-right: -4px; padding-right: 4px;
+}
+
+.fleets-table {
+  width: 100%; table-layout: fixed;
+  border-collapse: separate; border-spacing: 0; font-size: 13px;
+}
+
+.fleets-table th {
+  position: sticky; top: 0; background: #ffffff; z-index: 10;
+  text-align: left; padding: 8px var(--pc-space-xs);
+  font-size: 11px; text-transform: uppercase; color: var(--pc-text-secondary);
+  font-weight: 600; letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(0,0,0,0.06); white-space: nowrap;
+}
+
+/* FIX: Spaltenbreiten für 485px angepasst */
+.fleets-table th:nth-child(1) { width: 21%; padding-left: var(--pc-space-lg); } /* Kennz. */
+.fleets-table th:nth-child(2) { width: 23%; } /* Fahrzeug */
+.fleets-table th:nth-child(3) { width: 19%; } /* Ende */
+.fleets-table th:nth-child(4) { width: 15%; } /* Rate */
+.fleets-table th:nth-child(5) { width: 22%; padding-right: var(--pc-space-lg); } /* Ort */
+
+.fleets-table td {
+  padding: var(--pc-space-sm) var(--pc-space-xs);
+  vertical-align: middle; border-bottom: 1px solid rgba(0,0,0,0.03);
+  transition: background 0.15s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* Sicherstellen, dass hier der Default-Cursor greift */
+  cursor: default; 
+}
+
+.fleets-table td:first-child { padding-left: var(--pc-space-lg); }
+.fleets-table td:last-child { padding-right: var(--pc-space-lg); }
+
+.fleets-table tbody tr:hover td { background-color: var(--pc-bg-hover); }
+
+.fleets-row-new td { background-color: rgba(52, 199, 89, 0.08); }
+.fleets-row-new:hover td { background-color: rgba(52, 199, 89, 0.12) !important; }
+
+.fleets-empty {
+  text-align: center; padding: 40px !important; color: var(--pc-text-tertiary);
+  font-style: italic; white-space: normal !important;
+}
+
+/* ==========================================================================
+   7. Cell Components
+   ========================================================================== */
+
+.fleets-cell-plate { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.fleets-plate {
+  display: inline-block; background: var(--pc-gradient-plate); color: #fff;
+  font-family: var(--pc-font-mono); font-weight: 700; font-size: 12px;
+  padding: 6px 10px; border-radius: var(--pc-radius-sm);
+  box-shadow: 0 2px 4px rgba(52, 120, 246, 0.3);
+  white-space: nowrap; min-height: 28px; line-height: 1.3;
+}
+.fleets-badge-new {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; color: #fff;
+  background-color: var(--pc-accent-success); padding: 2px 6px;
+  border-radius: var(--pc-radius-xs); letter-spacing: 0.04em;
+  box-shadow: 0 1px 2px rgba(52, 199, 89, 0.3);
+}
+
+.fleets-cell-vehicle { display: flex; flex-direction: column; line-height: 1.3; overflow: hidden; }
+.fleets-brand {
+  font-size: 11px; color: var(--pc-text-secondary); text-transform: uppercase; font-weight: 600;
+}
+.fleets-model {
+  font-size: 13px; color: var(--pc-text-primary); font-weight: 500;
+  max-width: 14ch; 
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: block; 
+  cursor: default; /* FIX: Kein Help-Cursor mehr */
+}
+
+.fleets-cell-contract { display: flex; flex-direction: column; gap: 4px; }
+.fleets-date { font-size: 12px; color: var(--pc-text-secondary); font-feature-settings: "tnum"; }
+.fleets-progress-wrapper { display: flex; align-items: center; gap: 6px; }
+.fleets-progress { flex: 1; height: 5px; background-color: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden; min-width: 48px; max-width: 72px; }
+.fleets-progress-fill { height: 100%; border-radius: 3px; }
+.fleets-progress-fill.low { background-color: var(--pc-accent-success); }
+.fleets-progress-fill.mid { background-color: var(--pc-accent-warning); }
+.fleets-progress-fill.high { background-color: var(--pc-accent-danger); }
+.fleets-percent { font-size: 10px; color: var(--pc-text-tertiary); width: 24px; text-align: right; font-feature-settings: "tnum"; }
+
+.fleets-rate { font-weight: 600; color: var(--pc-text-primary); font-feature-settings: "tnum"; }
+
+.fleets-location {
+  color: var(--pc-text-secondary); font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+  cursor: default; /* FIX: Kein Help-Cursor mehr */
+}
+
+/* Toast */
+.fleets-toast {
+  position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
+  background: rgba(29, 29, 31, 0.9); color: #fff;
+  border-radius: var(--pc-radius-md); box-shadow: var(--pc-shadow-lg);
+  font-family: var(--pc-font-sans); font-size: 14px; font-weight: 500;
+  z-index: 1000000; opacity: 0; transform: translateY(10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+  backdrop-filter: blur(10px);
+}
+.fleets-toast.show { opacity: 1; transform: translateY(0) scale(1); }
+.fleets-toast-success { border-left: 4px solid var(--pc-accent-success); }
+.fleets-toast-warning { border-left: 4px solid var(--pc-accent-warning); }
+.fleets-toast-info    { border-left: 4px solid var(--pc-accent-blue); }
+
+/* ==========================================================================
+   8. Minimized State
+   ========================================================================== */
+
+#fleets-enhancer-overlay.minimized {
+  top: 65px; bottom: auto !important; right: var(--pc-space-md);
+  width: fit-content; height: 60px; border-radius: 30px;
+  background: rgba(255, 255, 255, 0.95); box-shadow: var(--pc-shadow-md);
+  border: 1px solid rgba(0,0,0,0.1); padding: 0; overflow: hidden;
+}
+
+#fleets-enhancer-overlay.minimized .fleets-body,
+#fleets-enhancer-overlay.minimized .fleets-filters,
+#fleets-enhancer-overlay.minimized .fleets-footer { display: none !important; }
+
+#fleets-enhancer-overlay.minimized .fleets-header {
+  height: 100%; padding: 0 8px 0 20px; border: none; background: transparent;
+  display: flex; align-items: center; gap: 12px;
+}
+#fleets-enhancer-overlay.minimized .fleets-logo { height: 24px; margin-right: 0; }
+#fleets-enhancer-overlay.minimized .fleets-header-actions { gap: 8px; }
+#fleets-enhancer-overlay.minimized .fleets-btn {
+  width: 40px; height: 40px; padding: 0; padding-bottom: 5px; display: flex; align-items: center;
+  justify-content: center; border-radius: 50%; background-color: var(--pc-bg-tertiary);
+  font-size: 20px; line-height: 1;
+}
+#fleets-enhancer-overlay.minimized .fleets-btn:hover { background-color: #d1d1d6; }
+#fleets-enhancer-overlay.minimized .fleets-btn-primary {
+  display: block; width: auto; height: 36px; padding: 0 14px; font-size: 13px;
+  border-radius: 18px; background-color: var(--pc-text-primary); color: #fff;
+}
+
+@keyframes pc-slide-in {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 500px) {
+  #fleets-enhancer-overlay {
+    width: calc(100vw - 32px); top: auto; bottom: 16px; right: 16px; left: 16px; height: 70vh;
+  }
+}

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleets Enhanced</title>
+  <style>
+    /* * Design adapted from overlay.css for consistency 
+     * Style: Apple/iOS Inspired (Glassmorphism, Clean)
+     */
+    :root {
+      /* Colors */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --bg-tertiary: #e5e5ea;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --accent: #007aff;
+      --accent-hover: #0062cc;
+      --success: #34c759;
+      --border: rgba(0, 0, 0, 0.05);
+      
+      /* Shapes */
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      width: 340px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
+    /* HEADER */
+    .header {
+      padding: 20px 24px 10px 24px;
+      text-align: center;
+      background: var(--bg-primary);
+    }
+    
+    .logo-container {
+      margin-bottom: 8px;
+    }
+    
+    .logo-img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+    
+    .header p {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+    
+    /* CONTENT WRAPPER */
+    .content {
+      padding: 16px 20px;
+    }
+    
+    /* STAT CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: var(--bg-secondary);
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: transform 0.2s ease;
+      border: 1px solid var(--border);
+    }
+    
+    .stat-card:hover {
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+    
+    .stat-value {
+      display: block;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    
+    .stat-value.success {
+      color: var(--success);
+    }
+    
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* INFO LIST */
+    .info-container {
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      color: var(--text-secondary);
+    }
+    
+    .info-value {
+      font-weight: 500;
+      font-feature-settings: "tnum";
+    }
+    
+    /* ACTIONS */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    
+    .btn:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+    }
+    
+    /* STATUS FOOTER */
+    .footer-status {
+      margin-top: 16px;
+      padding: 12px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+      transition: all 0.3s ease;
+    }
+    
+    /* Status: Connected */
+    .footer-status.connected .status-dot {
+      background: var(--success);
+      box-shadow: 0 0 6px rgba(52, 199, 89, 0.4);
+    }
+    .footer-status.connected {
+      color: #1b7f37;
+      background: rgba(52, 199, 89, 0.05);
+    }
+
+    /* Status: Disconnected */
+    .footer-status.disconnected .status-dot {
+      background: #ff3b30;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo-container">
+      <img src="icons/logo.png" alt="Fleets Enhanced Logo" class="logo-img">
+    </div>
+    <p>Enhanced Interface v2.0</p>
+  </div>
+  
+  <div class="content">
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-value" id="total-count">—</span>
+        <span class="stat-label">Fahrzeuge</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value success" id="new-count">—</span>
+        <span class="stat-label">Neu Entdeckt</span>
+      </div>
+    </div>
+    
+    <div class="info-container">
+      <div class="info-row">
+        <span class="info-label">Letzter Scan</span>
+        <span class="info-value" id="last-scan">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Erweiterung</span>
+        <span class="info-value">Aktiv</span>
+      </div>
+    </div>
+    
+    <div class="actions">
+      <button class="btn btn-primary" id="open-page">
+        Fleets Portal öffnen
+      </button>
+      <button class="btn btn-secondary" id="clear-data">
+        Daten zurücksetzen
+      </button>
+    </div>
+  </div>
+  
+  <div class="footer-status" id="status-container">
+    <span class="status-dot"></span>
+    <span id="status">Verbindung prüfen...</span>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
