@@ -2,7 +2,7 @@
 
 A Firefox extension that enhances the user experience for Fleets.eu fleet management portals.
 
-![Firefox](https://img.shields.io/badge/Firefox-140%2B-orange?logo=firefox)
+![Firefox](https://img.shields.io/badge/Firefox-142%2B-orange?logo=firefox)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-green)
 
@@ -43,7 +43,7 @@ cd fleets-enhanced
 
 ## Requirements
 
-- Firefox 140 or later
+- Firefox 142 or later
 - Access to a Fleets.eu fleet management portal
 
 ## Privacy & Security
@@ -88,7 +88,7 @@ fleets-enhanced/
 
 ### Prerequisites
 
-- Firefox 140+
+- Firefox 142+
 - Basic knowledge of WebExtensions API
 
 ### Testing
