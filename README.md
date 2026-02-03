@@ -35,7 +35,7 @@
 
 | Hauptübersicht | Verfügbarkeits-Heatmap | Geldwerter Vorteil |
 |----------------|------------------------|---------------------|
-| ![Overlay](screenshots/overlay.png) | ![Heatmap](screenshots/heatmap.png) | ![Rate](screenshots/rate-popup.png) |
+|<img src="https://addons.mozilla.org/user-media/previews/full/350/350521.png?modified=1770127130">|<img src="https://addons.mozilla.org/user-media/previews/full/350/350519.png?modified=1770127129"> |<img src="https://addons.mozilla.org/user-media/previews/full/350/350518.png?modified=1770127129"> |
 
 ---
 
