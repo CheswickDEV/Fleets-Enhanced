@@ -1,6 +1,6 @@
 /* * Fleets.eu Enhanced - Overlay Styles
  * Design: Apple/iOS Inspired (Glassmorphism, Clean, Minimalist)
- * Version: 2.8.0 (Width 485px, Force Default Cursor)
+ * Version: 3.0.1 (Improved rate popup design)
  */
 
 /* ==========================================================================
@@ -33,8 +33,7 @@
   --pc-space-xl: 24px;
 
   /* Dimensions */
-  /* FIX: Breite auf 485px gesetzt */
-  --pc-width-default: 485px; 
+  --pc-width-default: 560px; 
   --pc-header-height: 70px;
   
   /* Border Radius */
@@ -249,12 +248,13 @@
   border-bottom: 1px solid rgba(0,0,0,0.06); white-space: nowrap;
 }
 
-/* FIX: Spaltenbreiten für 485px angepasst */
-.fleets-table th:nth-child(1) { width: 21%; padding-left: var(--pc-space-lg); } /* Kennz. */
-.fleets-table th:nth-child(2) { width: 23%; } /* Fahrzeug */
-.fleets-table th:nth-child(3) { width: 19%; } /* Ende */
-.fleets-table th:nth-child(4) { width: 15%; } /* Rate */
-.fleets-table th:nth-child(5) { width: 22%; padding-right: var(--pc-space-lg); } /* Ort */
+/* Spaltenbreiten für 560px mit 6 Spalten */
+.fleets-table th:nth-child(1) { width: 19%; padding-left: var(--pc-space-lg); } /* Kennz. */
+.fleets-table th:nth-child(2) { width: 19%; } /* Fahrzeug */
+.fleets-table th:nth-child(3) { width: 17%; } /* Vertrag */
+.fleets-table th:nth-child(4) { width: 14%; } /* Verfügbarkeit */
+.fleets-table th:nth-child(5) { width: 13%; } /* Rate */
+.fleets-table th:nth-child(6) { width: 18%; padding-right: var(--pc-space-lg); } /* Ort */
 
 .fleets-table td {
   padding: var(--pc-space-sm) var(--pc-space-xs);
@@ -289,6 +289,17 @@
   padding: 6px 10px; border-radius: var(--pc-radius-sm);
   box-shadow: 0 2px 4px rgba(52, 120, 246, 0.3);
   white-space: nowrap; min-height: 28px; line-height: 1.3;
+}
+.fleets-plate-clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.fleets-plate-clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(52, 120, 246, 0.4);
+}
+.fleets-plate-clickable:active {
+  transform: scale(0.98);
 }
 .fleets-badge-new {
   font-size: 10px; font-weight: 700; text-transform: uppercase; color: #fff;
@@ -325,6 +336,430 @@
   color: var(--pc-text-secondary); font-size: 12px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
   cursor: default; /* FIX: Kein Help-Cursor mehr */
+}
+
+/* ==========================================================================
+   7b. Availability Badge & Heatmap Popup
+   ========================================================================== */
+
+.fleets-availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--pc-radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fleets-availability:hover {
+  transform: scale(1.02);
+  box-shadow: var(--pc-shadow-sm);
+}
+
+.fleets-availability-free {
+  background: rgba(52, 199, 89, 0.12);
+  color: #1b7f37;
+}
+
+.fleets-availability-blocked {
+  background: rgba(255, 59, 48, 0.12);
+  color: #d70015;
+}
+
+.fleets-availability-soon {
+  background: rgba(255, 149, 0, 0.12);
+  color: #c45d00;
+}
+
+.fleets-availability-loading {
+  background: var(--pc-bg-tertiary);
+  color: var(--pc-text-tertiary);
+}
+
+.fleets-availability-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fleets-availability-free .fleets-availability-dot { background: var(--pc-accent-success); }
+.fleets-availability-blocked .fleets-availability-dot { background: var(--pc-accent-danger); }
+.fleets-availability-soon .fleets-availability-dot { background: var(--pc-accent-warning); }
+.fleets-availability-loading .fleets-availability-dot { 
+  background: var(--pc-text-tertiary);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Heatmap Popup */
+.fleets-heatmap-popup {
+  all: initial;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 1000001;
+  background: #ffffff !important;
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18), 0 8px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
+  border: none;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 340px;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #1d1d1f;
+}
+
+.fleets-heatmap-popup * {
+  box-sizing: border-box;
+}
+
+.fleets-heatmap-popup.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.fleets-heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.fleets-heatmap-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fleets-heatmap-plate {
+  display: inline-block;
+  background: linear-gradient(135deg, #3478f6 0%, #00c7be 100%);
+  color: #fff;
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(52, 120, 246, 0.3);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.fleets-heatmap-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #86868b;
+}
+
+.fleets-heatmap-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f2f2f7;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #86868b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  line-height: 1;
+  padding: 0;
+  padding-bottom: 2px;
+}
+
+.fleets-heatmap-close:hover {
+  background: #e5e5ea;
+  color: #1d1d1f;
+}
+
+.fleets-heatmap-close:active {
+  transform: scale(0.96);
+}
+
+.fleets-heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.fleets-heatmap-month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.fleets-heatmap-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.fleets-heatmap-cell {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  transition: transform 0.1s ease;
+  cursor: default;
+}
+
+.fleets-heatmap-cell:hover {
+  transform: scale(1.08);
+}
+
+.fleets-heatmap-cell.free {
+  background: #e8f7ec;
+  color: #1b7f37;
+}
+
+.fleets-heatmap-cell.partial {
+  background: #fff4e5;
+  color: #b35c00;
+}
+
+.fleets-heatmap-cell.blocked {
+  background: #ffe5e5;
+  color: #c41e3a;
+}
+
+.fleets-heatmap-cell.past {
+  background: #f5f5f7;
+  color: #aeaeb2;
+}
+
+.fleets-heatmap-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.fleets-heatmap-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #86868b;
+}
+
+.fleets-heatmap-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.fleets-heatmap-legend-dot.free { background: #34c759; }
+.fleets-heatmap-legend-dot.partial { background: #ff9500; }
+.fleets-heatmap-legend-dot.blocked { background: #ff3b30; }
+
+/* ==========================================================================
+   7c. Rate Popup (Geldwerter Vorteil)
+   ========================================================================== */
+
+.fleets-rate-clickable {
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 2px 6px;
+  margin: -2px -6px;
+  border-radius: 6px;
+}
+
+.fleets-rate-clickable:hover {
+  background: rgba(0, 122, 255, 0.08);
+  color: #007aff;
+}
+
+.fleets-rate-popup {
+  all: initial;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 1000001;
+  background: #ffffff !important;
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18), 0 8px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
+  padding: 16px 20px;
+  min-width: 240px;
+  max-width: 280px;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #1d1d1f;
+}
+
+.fleets-rate-popup * {
+  box-sizing: border-box;
+}
+
+.fleets-rate-popup.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.fleets-rate-popup.loading {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fleets-rate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.fleets-rate-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fleets-rate-plate {
+  display: inline-block;
+  background: linear-gradient(135deg, #3478f6 0%, #00c7be 100%);
+  color: #fff;
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(52, 120, 246, 0.3);
+}
+
+.fleets-rate-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f2f2f7;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #86868b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  padding-bottom: 2px;
+}
+
+.fleets-rate-close:hover {
+  background: #e5e5ea;
+  color: #1d1d1f;
+}
+
+.fleets-rate-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fleets-rate-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.fleets-rate-label {
+  color: #86868b;
+}
+
+.fleets-rate-value {
+  color: #1d1d1f;
+  font-feature-settings: "tnum";
+}
+
+.fleets-rate-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+  margin: 4px 0;
+}
+
+.fleets-rate-highlight {
+  background: linear-gradient(135deg, rgba(52, 199, 89, 0.08) 0%, rgba(48, 209, 88, 0.12) 100%);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-top: 4px;
+  border: 1px solid rgba(52, 199, 89, 0.15);
+}
+
+.fleets-rate-highlight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fleets-rate-highlight-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1b7f37;
+}
+
+.fleets-rate-highlight-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1b7f37;
+  font-feature-settings: "tnum";
+}
+
+.fleets-rate-highlight-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #34c759;
+  margin-top: 6px;
+}
+
+.fleets-rate-highlight-type {
+  font-weight: 400;
+}
+
+.fleets-rate-highlight-percent {
+  font-weight: 500;
+  background: rgba(52, 199, 89, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.fleets-rate-loading {
+  color: #86868b;
+  font-size: 13px;
 }
 
 /* Toast */

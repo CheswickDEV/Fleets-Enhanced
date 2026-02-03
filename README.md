@@ -1,126 +1,215 @@
-# 🚗 Fleets Enhanced
+# Fleets Enhanced
 
-A Firefox extension that enhances the user experience for Fleets.eu fleet management portals.
+<p align="center">
+  <img src="icons/icon-128.png" alt="Fleets Enhanced Logo" width="128" height="128">
+</p>
 
-![Firefox](https://img.shields.io/badge/Firefox-140%2B-orange?logo=firefox)
-![License](https://img.shields.io/badge/License-MIT-blue)
-![Manifest](https://img.shields.io/badge/Manifest-V3-green)
+<p align="center">
+  <strong>Eine Firefox-Erweiterung zur Verbesserung des Flottenmanagement-Portals</strong>
+</p>
 
-## Features
-
-- **Apple-inspired Design** – Modern, clean UI with glassmorphism effects
-- **Automatic Vehicle Detection** – Scrapes all vehicle data automatically
-- **New Vehicle Highlighting** – New entries are marked with a green badge
-- **Search & Filter** – Quickly find vehicles by license plate, brand, model, or location
-- **Sorting** – Sort by license plate, brand, contract end date, leasing rate, or location
-- **Persistent Storage** – Data persists across browser sessions
-- **Privacy-focused** – All data stays local, no external transmission
-
-## Screenshots
-
-*Coming soon*
-
-## Installation
-
-### Firefox Add-ons (Recommended)
-*Coming soon - pending Mozilla review*
-
-### Manual Installation
-
-1. Download the latest release from [Releases](../../releases)
-2. Open Firefox and go to `about:debugging`
-3. Click "This Firefox" → "Load Temporary Add-on..."
-4. Select the `manifest.json` file from the extracted folder
-5. Navigate to any `*.fleets.eu` portal
-
-### From Source
-
-```bash
-git clone https://github.com/YOUR_USERNAME/fleets-enhanced.git
-cd fleets-enhanced
-# Load via about:debugging as described above
-```
-
-## Requirements
-
-- Firefox 140 or later
-- Access to a Fleets.eu fleet management portal
-
-## Privacy & Security
-
-This extension implements several security measures:
-
-- **XSS Protection**: All user data is sanitized before display
-- **Input Validation**: Numeric values are validated
-- **No External Resources**: All assets are bundled locally
-- **Minimal Permissions**: Only `storage`, `activeTab`, and `tabs` required
-- **No Data Collection**: Extension does not collect or transmit any personal data
-- **Local Storage Only**: All vehicle data stays in your browser
-
-## File Structure
-
-```
-fleets-enhanced/
-├── manifest.json          # Extension configuration
-├── popup.html             # Popup UI
-├── popup.js               # Popup logic
-├── scripts/
-│   ├── background.js      # Service Worker
-│   └── content_script.js  # DOM Scraper & Overlay
-├── styles/
-│   └── overlay.css        # Apple-inspired styling
-└── icons/
-    ├── icon-48.png
-    ├── icon-96.png
-    ├── icon-128.png
-    └── logo.png
-```
-
-## How It Works
-
-1. The content script scans the fleet portal page for vehicle data
-2. Data is extracted using DOM queries (license plates, brands, models, contract dates, etc.)
-3. Vehicle data is stored locally using `browser.storage.local`
-4. New vehicles are identified by comparing against previously stored data
-5. An overlay displays all vehicles in a sortable, searchable table
-
-## Development
-
-### Prerequisites
-
-- Firefox 140+
-- Basic knowledge of WebExtensions API
-
-### Testing
-
-1. Make changes to the source files
-2. Go to `about:debugging` in Firefox
-3. Click "Reload" on the extension
-4. Refresh the Fleets.eu page
-
-### Building
-
-No build step required – the extension runs directly from source.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Design inspired by Apple's Human Interface Guidelines
-- Built with the WebExtensions API
+<p align="center">
+  <img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/firefox-manifest%20v2-orange.svg" alt="Firefox Manifest V2">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+</p>
 
 ---
 
-**Note**: This extension is not affiliated with or endorsed by Fleets.eu or any fleet management provider. It is an independent tool to enhance the user experience.
+## 📋 Übersicht
+
+**Fleets Enhanced** ist eine Firefox-Browser-Erweiterung, die das Flottenmanagement-Portal um zusätzliche Funktionen und eine verbesserte Benutzeroberfläche erweitert. Die Erweiterung bietet ein elegantes Overlay mit Apple-inspiriertem Design, das wichtige Fahrzeuginformationen übersichtlich darstellt.
+
+### ✨ Hauptfunktionen
+
+- **Fahrzeug-Übersicht**: Übersichtliche Tabelle aller verfügbaren Fahrzeuge
+- **Verfügbarkeits-Tracking**: Echtzeit-Anzeige der Fahrzeugverfügbarkeit mit 12-Monats-Heatmap
+- **Geldwerter Vorteil**: Automatische Berechnung der 1%-Regel basierend auf Bruttolistenpreis und Antriebsart
+- **Neue Fahrzeuge erkennen**: Automatische Markierung neu hinzugefügter Fahrzeuge
+- **Sortierung & Filterung**: Flexible Sortieroptionen für alle Spalten
+- **Direkter Zugriff**: Klick auf Kennzeichen öffnet Fahrzeug-Details
+
+---
+
+## 🖼️ Screenshots
+
+| Hauptübersicht | Verfügbarkeits-Heatmap | Geldwerter Vorteil |
+|----------------|------------------------|---------------------|
+| ![Overlay](screenshots/overlay.png) | ![Heatmap](screenshots/heatmap.png) | ![Rate](screenshots/rate-popup.png) |
+
+---
+
+## 🚀 Installation
+
+### Temporäre Installation (Entwicklung)
+
+1. Firefox öffnen und `about:debugging` in die Adressleiste eingeben
+2. "Dieser Firefox" auswählen
+3. "Temporäres Add-on laden..." klicken
+4. Die `manifest.json` Datei aus dem Projektordner auswählen
+
+### Dauerhafte Installation
+
+1. Die `.zip`-Datei in `.xpi` umbenennen
+2. In Firefox auf das Menü klicken → Add-ons und Themes
+3. Zahnrad-Icon → "Add-on aus Datei installieren..."
+4. Die `.xpi`-Datei auswählen
+
+---
+
+## 📖 Verwendung
+
+### Overlay öffnen
+
+Nach der Installation erscheint das Overlay automatisch auf der Flottenmanagement-Seite. Es kann über den Button oben rechts minimiert/maximiert werden.
+
+### Interaktive Elemente
+
+| Element | Aktion | Beschreibung |
+|---------|--------|--------------|
+| **Kennzeichen** | Klick | Öffnet das Fahrzeug-Detail-Modal |
+| **Verfügbarkeit** | Klick | Zeigt 12-Monats-Heatmap der Verfügbarkeit |
+| **Leasingrate** | Klick | Zeigt Bruttolistenpreis und geldwerten Vorteil |
+| **Spaltenüberschriften** | Klick | Sortiert die Tabelle nach dieser Spalte |
+| **Scannen-Button** | Klick | Aktualisiert die Fahrzeugliste |
+
+### Verfügbarkeits-Status
+
+| Badge | Bedeutung |
+|-------|-----------|
+| 🟢 **Frei** | Fahrzeug ist ab sofort verfügbar |
+| 🟢 **Frei (XM)** | Fahrzeug ist X Monate am Stück frei |
+| 🟡 **Ab DD.MM** | Fahrzeug ist ab diesem Datum verfügbar |
+| 🔴 **Blockiert** | Fahrzeug ist bis Vertragsende nicht verfügbar |
+
+### Geldwerter Vorteil (1%-Regel)
+
+Die Berechnung erfolgt automatisch basierend auf:
+
+| Antriebsart | Bruttolistenpreis | Steuersatz |
+|-------------|-------------------|------------|
+| Elektro | ≤ 70.000 € | **0,25%** |
+| Elektro | > 70.000 € | **0,5%** |
+| Plug-in-Hybrid | — | **0,5%** |
+| Verbrenner | — | **1,0%** |
+
+---
+
+## 🎨 Design
+
+Das Interface folgt Apple's Design-Richtlinien:
+
+- **Glassmorphism**: Subtile Transparenz und Blur-Effekte
+- **SF Pro Font**: System-native Typografie
+- **8-Point Grid**: Konsistente Abstände
+- **Gradient Badges**: Blau-türkiser Farbverlauf für Kennzeichen
+- **Smooth Animations**: Sanfte Übergänge und Hover-Effekte
+
+### Farbpalette
+
+```css
+--primary:    #007AFF  /* Apple Blue */
+--success:    #34C759  /* Grün - Frei */
+--warning:    #FF9500  /* Orange - Teilweise */
+--danger:     #FF3B30  /* Rot - Blockiert */
+--gradient:   linear-gradient(135deg, #3478f6 0%, #00c7be 100%)
+```
+
+---
+
+## 📁 Projektstruktur
+
+```
+fleets-enhanced/
+├── manifest.json           # Extension-Manifest (v2)
+├── README.md               # Diese Datei
+│
+├── scripts/
+│   ├── content_script.js   # Haupt-Logik (DOM, API, UI)
+│   └── background.js       # Service Worker
+│
+├── styles/
+│   └── overlay.css         # Alle Styles
+│
+├── icons/
+│   ├── icon-48.png
+│   ├── icon-96.png
+│   ├── icon-128.png
+│   └── logo.png
+│
+├── popup.html              # Browser-Action Popup
+└── popup.js                # Popup-Logik
+```
+
+---
+
+## 🔧 Technische Details
+
+### API-Endpunkte
+
+Die Erweiterung nutzt folgende API-Endpunkte:
+
+| Endpunkt | Methode | Beschreibung |
+|----------|---------|--------------|
+| `/api/pool/booked-days` | POST | Verfügbarkeits-Daten |
+| `/api/pool/car-details` | POST | Fahrzeug-Details (BLP, Antrieb) |
+
+### Datenspeicherung
+
+- **browser.storage.local**: Persistente Speicherung der Fahrzeugdaten
+- **Diffing-Algorithmus**: Erkennt neue Fahrzeuge durch Vergleich mit gespeichertem Stand
+
+### Sicherheit
+
+- ✅ Keine `innerHTML` - Alle DOM-Manipulationen über sichere Methoden
+- ✅ Input-Sanitization für alle Benutzerdaten
+- ✅ CSP-konform
+
+---
+
+## 📝 Changelog
+
+### v2.0.0 (aktuell)
+- ✨ Kennzeichen klickbar → öffnet Fahrzeug-Detail-Modal
+- ✨ Kennzeichen-Formatierung (DCG5128E → D-CG-5128E)
+- ✨ Geldwerter Vorteil Popup bei Klick auf Leasingrate
+- ✨ Deutsche Antriebsart-Übersetzungen
+- ✨ Verfügbarkeits-Spalte mit Echtzeit-Status
+- ✨ 12-Monats-Heatmap bei Klick auf Verfügbarkeit
+
+
+### v1.0.0
+- 🚀 Initiale Version
+- ✨ Basis-Scraping und Overlay
+
+---
+
+## 🤝 Mitwirken
+
+Beiträge sind willkommen! Bitte erstelle einen Pull Request oder öffne ein Issue.
+
+1. Fork des Repositories
+2. Feature-Branch erstellen (`git checkout -b feature/AmazingFeature`)
+3. Änderungen committen (`git commit -m 'Add some AmazingFeature'`)
+4. Branch pushen (`git push origin feature/AmazingFeature`)
+5. Pull Request öffnen
+
+---
+
+## 📄 Lizenz
+
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE) für Details.
+
+---
+
+## 👤 Autor
+
+**Tim W.**
+
+- GitHub: [@Cheswick](https://github.com/CheswickDEV)
+
+---
+
+<p align="center">
+  Made with ❤️ for better fleet management
+</p>
